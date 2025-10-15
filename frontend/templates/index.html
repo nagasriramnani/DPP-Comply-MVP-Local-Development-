@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DPP-Comply MVP</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+<header>
+  <h1>DPP‑Comply MVP</h1>
+  <p class="subtitle">Local demo of Digital Product Passport processing (ESPR)</p>
+</header>
+
+<main class="container">
+  <section class="panel">
+    <h2>1) Paste Raw Supplier Data</h2>
+    <textarea id="rawJson" spellcheck="false" placeholder='{
+  "product_name": "Eco Tee",
+  "manufacturer": "GreenThreads",
+  "description": "Material: Cotton 60%, Polyester 40%. Recycled content ~ 25%. CO2 ~ 2.4 kg CO2e.",
+  "notes": "Repair score 7/10; Wash cold; Recycle fabric."
+}'></textarea>
+    <div class="actions">
+      <button id="processBtn">Process to DPP</button>
+      <button id="loadSample">Load Textile Sample</button>
+      <button id="loadElectronics">Load Electronics Sample</button>
+    </div>
+    <div id="status" class="status">Ready.</div>
+  </section>
+
+  <section class="panel">
+    <h2>2) Standardized Digital Product Passport</h2>
+    <pre id="dppOutput" class="codeblock">// processed DPP JSON will appear here</pre>
+    <div id="links" class="links"></div>
+  </section>
+
+  <section class="panel">
+    <h2>Saved Products</h2>
+    <ul id="productList"></ul>
+  </section>
+</main>
+
+<footer>
+  <p>Mock AI mode: <strong id="mockMode">unknown</strong>. Backend: FastAPI. Frontend: vanilla JS.</p>
+</footer>
+
+<script src="/static/js/app.js"></script>
+</body>
+</html>

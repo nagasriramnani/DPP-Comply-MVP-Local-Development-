@@ -1,0 +1,28 @@
+# Python & build
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+
+# Virtual env
+venv/
+
+# Env & secrets
+.env
+*.env
+
+# Local data (keep regulatory docs but not generated files)
+data/raw_supplier_data/
+data/processed_dpp/
+!data/regulatory_docs/
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Archives
+*.zip

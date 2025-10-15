@@ -1,0 +1,10 @@
+{
+  "name": "dpp-comply-mvp",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "echo \"Use: python scripts/run_dev.py\"",
+    "test": "echo \"Use: pytest tests/\""
+  },
+  "devDependencies": {}
+}
