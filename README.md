@@ -92,14 +92,6 @@ Each processed product is saved to `data/processed_dpp/{product_id}.json`. View 
 ```bash
 pytest tests/ -v
 ```
-
-## 📸 Screenshots
-
-| Feature | Preview |
-|--------|---------|
-| Output | ![OUTPUT](Outputs\Output.png)
-| Saved DPP | ![SAVED_DPP](Outputs\Savedruns.png) | 
-
 ## Explain extensibility
 
 Integrating with real supply-chain APIs later 
