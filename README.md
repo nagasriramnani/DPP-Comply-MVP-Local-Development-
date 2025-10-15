@@ -11,6 +11,16 @@ Runs entirely offline in mock mode and demonstrates:
 
 ## Quick Start
 
+# Environment template
+IN PROJECT STRUCTURE MAKE SURE TO ADD( .env in project ):
+- ENV=development
+- MOCK_MODE=true
+- AI_BACKEND=openai
+- OPENAI_API_KEY= PLACE HERE YOUR OPEN AI KEY
+- DATA_DIR=data
+- ALLOW_ORIGINS=http://localhost:8000,http://127.0.0.1:8000
+
+
 ```bash
 # 1) Create venv
 python -m venv venv
