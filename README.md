@@ -97,8 +97,8 @@ pytest tests/ -v
 
 | Feature | Preview |
 |--------|---------|
-| Output | ![OUTPUT](Outputs/Outputs.png) |
-| Saved DPP | ![SAVED_DPP](Outputs/savedruns.png) |
+| Output | ![OUTPUT](Outputs\Output.png)
+| Saved DPP | ![SAVED_DPP](Outputs\Savedruns.png) | 
 
 ## Explain extensibility
 
