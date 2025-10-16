@@ -8,18 +8,20 @@
 </head>
 <body>
 <header>
-  <h1>DPP‑Comply MVP</h1>
+  <h1>DPP-Comply MVP</h1>
   <p class="subtitle">Local demo of Digital Product Passport processing (ESPR)</p>
+  <div id="modeBadge" class="mode-badge">Detecting mode…</div>
 </header>
 
-<main class="container">
+<main class="container grid-3">
   <section class="panel">
     <h2>1) Paste Raw Supplier Data</h2>
     <textarea id="rawJson" spellcheck="false" placeholder='{
   "product_name": "Eco Tee",
   "manufacturer": "GreenThreads",
   "description": "Material: Cotton 60%, Polyester 40%. Recycled content ~ 25%. CO2 ~ 2.4 kg CO2e.",
-  "notes": "Repair score 7/10; Wash cold; Recycle fabric."
+  "notes": "Repair score 7/10; Wash cold; Recycle fabric.",
+  "suppliers": ["Acme Textiles Ltd", "EcoPack Co"]
 }'></textarea>
     <div class="actions">
       <button id="processBtn">Process to DPP</button>
@@ -33,16 +35,56 @@
     <h2>2) Standardized Digital Product Passport</h2>
     <pre id="dppOutput" class="codeblock">// processed DPP JSON will appear here</pre>
     <div id="links" class="links"></div>
+    <div class="insights">
+      <h3>AI Insights</h3>
+      <div id="insightText" class="insight-text">No product processed yet.</div>
+      <div class="meters">
+        <div class="meter">
+          <div class="label">Recycled %</div>
+          <div class="radial" id="recycledRadial"></div>
+        </div>
+        <div class="meter">
+          <div class="label">CO₂ (kg)</div>
+          <div class="bar">
+            <div class="bar-fill" id="co2Bar"></div>
+          </div>
+        </div>
+        <div class="meter">
+          <div class="label">Compliance Score</div>
+          <div class="bar">
+            <div class="bar-fill" id="scoreBar"></div>
+          </div>
+        </div>
+      </div>
+      <canvas id="materialsChart" width="320" height="220" class="chart"></canvas>
+      <div class="export-row">
+        <button id="btnExportCsv">Export CSV</button>
+      </div>
+    </div>
   </section>
 
-  <section class="panel">
+  <aside class="panel assistant">
+    <h2>Ask AI about this product</h2>
+    <div id="chatBox" class="chat-box"></div>
+    <div class="chat-input">
+      <input id="chatQuestion" type="text" placeholder="e.g., How can we increase circularity score?" />
+      <button id="chatSend">Send</button>
+    </div>
+  </aside>
+
+  <section class="panel span-3">
     <h2>Saved Products</h2>
     <ul id="productList"></ul>
   </section>
 </main>
 
+<div id="processingOverlay" class="overlay hidden">
+  <div class="spinner"></div>
+  <div class="overlay-text">AI is standardizing your data…</div>
+</div>
+
 <footer>
-  <p>Mock AI mode: <strong id="mockMode">unknown</strong>. Backend: FastAPI. Frontend: vanilla JS.</p>
+  <p>Backend: FastAPI. Frontend: vanilla JS. Visuals: custom canvas/CSS (offline).</p>
 </footer>
 
 <script src="/static/js/app.js"></script>

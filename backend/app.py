@@ -11,7 +11,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from .config import settings
-from .ai_processor import standardize_product_data
+from .ai_processor import standardize_product_data, summarize_insights, qa_on_dpp
 from .models import DigitalProductPassport
 from .services.data_validator import check_espr_compliance
 
@@ -109,3 +109,53 @@ def compliance_report(product_id: str):
         data = json.load(f)
     report = check_espr_compliance(data)
     return report
+
+@app.get("/api/config")
+def get_config():
+    return {
+        "ai_backend": settings.AI_BACKEND,
+        "openai_configured": bool(settings.OPENAI_API_KEY),
+    }
+
+@app.post("/api/insights")
+def get_insights(dpp: Dict[str, Any] = Body(...)):
+    # Accepts a DPP JSON and returns summary + score
+    return summarize_insights(dpp)
+
+@app.post("/api/assistant")
+def assistant_qa(payload: Dict[str, Any] = Body(...)):
+    """
+    Payload: { "product_id": "<id>", "question": "..." }
+    Loads the DPP from disk and answers the question.
+    """
+    pid = payload.get("product_id")
+    question = payload.get("question") or ""
+    fp = PROCESSED_DIR / f"{pid}.json"
+    if not pid or not fp.exists():
+        raise HTTPException(status_code=404, detail="Product not found")
+    with fp.open("r", encoding="utf-8") as f:
+        dpp = json.load(f)
+    answer = qa_on_dpp(dpp, question)
+    return {"answer": answer}
+
+@app.get("/api/product/{product_id}/export.csv")
+def export_csv(product_id: str):
+    import io, csv
+    fp = PROCESSED_DIR / f"{product_id}.json"
+    if not fp.exists():
+        raise HTTPException(status_code=404, detail="DPP not found")
+    with fp.open("r", encoding="utf-8") as f:
+        dpp = json.load(f)
+    # flatten to simple rows: materials + key metrics
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(["product_id","product_name","manufacturer","metric","value"])
+    writer.writerow([dpp["product_id"], dpp["product_name"], dpp["manufacturer"], "recycled_content_percentage", dpp.get("recycled_content_percentage",0)])
+    writer.writerow([dpp["product_id"], dpp["product_name"], dpp["manufacturer"], "co2_footprint_kg", dpp.get("co2_footprint_kg",0)])
+    writer.writerow([dpp["product_id"], dpp["product_name"], dpp["manufacturer"], "repair_score", dpp.get("repair_score","")])
+    for m in dpp.get("materials_composition", []):
+        writer.writerow([dpp["product_id"], dpp["product_name"], dpp["manufacturer"], f"material:{m.get('name','')}", m.get("percentage",0)])
+    return JSONResponse(
+        content={"csv": output.getvalue()},
+        media_type="application/json"
+    )
